@@ -24,6 +24,8 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   late bool titleEmpty;
   late final TextEditingController _titleController;
   late final TextEditingController _contentController;
+  late final FocusNode _titleFocusNode;
+  late final FocusNode _contentFocusNode;
   late GlobalKey<FormState> _taskKey;
   late stt.SpeechToText _speech;
   late int _recordedTime = 0;
@@ -35,6 +37,8 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
 
   @override
   void initState() {
+    _titleFocusNode = FocusNode();
+    _contentFocusNode = FocusNode();
     titleEmpty = widget.task == null ? true : false;
     _titleController =
         widget.task == null
@@ -65,7 +69,8 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
       });
       _speech.listen(
         pauseFor: Duration(minutes: 5),
-        localeId: LocalizationCubit.get(context).recordingLanguage,
+        localeId:
+            mounted ? LocalizationCubit.get(context).recordingLanguage : 'ar',
         listenOptions: stt.SpeechListenOptions(
           partialResults: true,
           listenMode: stt.ListenMode.dictation,
@@ -100,7 +105,8 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
     _contentController.dispose();
     _taskKey = GlobalKey<FormState>();
     _timer?.cancel();
-
+    _titleFocusNode.dispose();
+    _contentFocusNode.dispose();
     super.dispose();
   }
 
@@ -129,6 +135,14 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
                     AddTaskTextField(
                       maxLength: 30,
                       textEditingController: _titleController,
+                      focusNode: _titleFocusNode,
+                      onFieldSubmitted: (val) {
+                        FocusScope.of(context).requestFocus(_contentFocusNode);
+                      },
+                      onTapOutside: (val) {
+                        _titleFocusNode.unfocus();
+                      },
+                      textInputAction: TextInputAction.next,
                       text: 'taskTitle',
                       type: FieldType.normal,
                       onChanged: (value) {
@@ -145,11 +159,18 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
                     SizedBox(height: 20.h),
                     AddTaskTextField(
                       textEditingController: _contentController,
+                      focusNode: _contentFocusNode,
+                      onFieldSubmitted: (val) {
+                        _contentFocusNode.unfocus();
+                      },
+                      onTapOutside: (val) {
+                        _contentFocusNode.unfocus();
+                      },
+                      textInputAction: TextInputAction.done,
                       text: 'taskContent',
                       trailling: GestureDetector(
                         onTap: _isListening ? null : _startListening,
 
-                        // onLongPressUp: _stopListening,
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,

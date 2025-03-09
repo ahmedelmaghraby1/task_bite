@@ -19,7 +19,7 @@ class TaskTile extends StatelessWidget {
     return ShadowedContainer(
       borderColor: Theme.of(context).colorScheme.tertiary,
       padding: EdgeInsetsDirectional.only(
-        start: 30.w,
+        start: 20.w,
         end: 15.w,
         top: 10.h,
         bottom: 10.h,

@@ -6,11 +6,19 @@ class SearchBox extends StatelessWidget {
   final void Function(String)? onChanged;
   final String? hintText;
   final TextEditingController textEditingController;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final void Function(PointerDownEvent)? onTapOutside;
+  final void Function(String)? onFieldSubmitted;
   const SearchBox({
     super.key,
     required this.textEditingController,
     this.onChanged,
     this.hintText,
+    this.focusNode,
+    this.textInputAction,
+    this.onTapOutside,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -29,6 +37,10 @@ class SearchBox extends StatelessWidget {
       child: TextFormField(
         onChanged: onChanged,
         controller: textEditingController,
+        focusNode: focusNode,
+        textInputAction: textInputAction,
+        onFieldSubmitted: onFieldSubmitted,
+        onTapOutside: onTapOutside,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search),
           hintText: (hintText ?? 'search').tr(context),

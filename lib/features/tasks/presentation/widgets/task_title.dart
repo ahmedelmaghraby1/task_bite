@@ -9,8 +9,7 @@ class TaskTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 34.h,
-      width: 145.w,
-      padding: EdgeInsetsDirectional.only(start: 20.w),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 10.w),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.tertiary,
         borderRadius: BorderRadius.circular(10.r),

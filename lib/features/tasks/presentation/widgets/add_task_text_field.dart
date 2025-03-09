@@ -8,6 +8,10 @@ class AddTaskTextField extends StatelessWidget {
   final FieldType type;
   final Widget? trailling;
   final int? maxLength;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final void Function(PointerDownEvent)? onTapOutside;
+  final void Function(String)? onFieldSubmitted;
   final void Function(String)? onChanged;
   final String text;
   final TextEditingController textEditingController;
@@ -19,6 +23,10 @@ class AddTaskTextField extends StatelessWidget {
     this.onChanged,
     this.trailling,
     this.maxLength,
+    this.focusNode,
+    this.textInputAction,
+    this.onTapOutside,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -26,6 +34,10 @@ class AddTaskTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsetsDirectional.symmetric(horizontal: 15.w),
       child: TextFormField(
+        focusNode: focusNode,
+        textInputAction: textInputAction,
+        onFieldSubmitted: onFieldSubmitted,
+        onTapOutside: onTapOutside,
         maxLength: maxLength,
         maxLines: 10,
         minLines: 1,

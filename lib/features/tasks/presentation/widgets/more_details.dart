@@ -22,7 +22,17 @@ class MoreDetails extends StatelessWidget {
             arguments: {'taskKey': taskKey, 'task': task},
           );
         },
-        child: Text('moreDetails'.tr(context)),
+        child: Row(
+          children: [
+            Text(
+              'moreDetails'.tr(context),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 20),
+          ],
+        ),
       ),
     );
   }

@@ -19,12 +19,15 @@ class NewTasksView extends StatefulWidget {
 
 class _NewTasksViewState extends State<NewTasksView> {
   late final TextEditingController _searchController;
+  late final FocusNode _searchFocusNode;
+
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _searchFocusNode = FocusNode();
   }
 
   void _onSearchChanged(String value) {
@@ -38,6 +41,8 @@ class _NewTasksViewState extends State<NewTasksView> {
   void dispose() {
     _searchController.dispose();
     _debounce?.cancel();
+    _searchFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -53,6 +58,14 @@ class _NewTasksViewState extends State<NewTasksView> {
           SizedBox(height: 20.h),
           SearchBox(
             textEditingController: _searchController,
+            focusNode: _searchFocusNode,
+            onFieldSubmitted: (val) {
+              _searchFocusNode.unfocus();
+            },
+            onTapOutside: (val) {
+              _searchFocusNode.unfocus();
+            },
+            textInputAction: TextInputAction.done,
             onChanged: _onSearchChanged,
           ),
           ValueListenableBuilder(

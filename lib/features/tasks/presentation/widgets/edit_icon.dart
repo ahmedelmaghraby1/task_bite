@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskbite/core/helpers/hive_helper.dart';
 import 'package:taskbite/features/tasks/data/models/task_model.dart';
+import 'package:taskbite/features/tasks/presentation/widgets/custom_circle_avatar.dart';
 
 class EditIcon extends StatelessWidget {
   final TaskModel task;
@@ -13,7 +14,7 @@ class EditIcon extends StatelessWidget {
       onTap: () {
         HiveHelper.editTask(context: context, taskKey: taskKey, task: task);
       },
-      child: CircleAvatar(child: Icon(Icons.edit)),
+      child: CustomCircleAvatar(child: Icon(Icons.edit, size: 20)),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskbite/core/helpers/hive_helper.dart';
 import 'package:taskbite/features/tasks/data/models/task_model.dart';
+import 'package:taskbite/features/tasks/presentation/widgets/custom_circle_avatar.dart';
 
 class DeleteIcon extends StatelessWidget {
   final TaskModel task;
@@ -13,9 +14,9 @@ class DeleteIcon extends StatelessWidget {
       onTap: () {
         HiveHelper.deleteTask(context: context, taskKey: taskKey);
       },
-      child: CircleAvatar(
+      child: CustomCircleAvatar(
         backgroundColor: Theme.of(context).colorScheme.error,
-        child: Icon(Icons.delete_outline),
+        child: Icon(Icons.delete_forever, size: 20),
       ),
     );
   }
