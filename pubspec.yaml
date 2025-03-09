@@ -40,10 +40,6 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   speech_to_text:
-    git:
-      url: https://github.com/ahmedelmaghraby1/speech_to_text.git
-      path: speech_to_text
-      ref: main
 
 dev_dependencies:
   build_runner: ^2.4.15

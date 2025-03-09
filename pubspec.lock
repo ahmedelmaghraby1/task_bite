@@ -634,12 +634,11 @@ packages:
   speech_to_text:
     dependency: "direct main"
     description:
-      path: speech_to_text
-      ref: main
-      resolved-ref: e6952b16b4aa5f174fef19fe760e207904e35290
-      url: "https://github.com/ahmedelmaghraby1/speech_to_text.git"
-    source: git
-    version: "7.1.0-beta.3"
+      name: speech_to_text
+      sha256: "6cf8f284997490ebef1d68f8707bef57dcf083f43c0f915cc285428520bfe6be"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   speech_to_text_platform_interface:
     dependency: transitive
     description:
