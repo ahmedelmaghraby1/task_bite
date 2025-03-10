@@ -92,7 +92,7 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
 
             onResult: (result) {
               setState(() {
-                _text = result.recognizedWords;
+                _text += result.recognizedWords;
               });
             },
             onSoundLevelChange: (level) {
@@ -117,7 +117,7 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
 
     setState(() {
       _isListening = false;
-      _contentController.text += ' $_text';
+      _contentController.text = _text;
     });
   }
 
