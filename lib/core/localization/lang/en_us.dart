@@ -30,4 +30,5 @@ final Map<String, String> enUs = {
   'deletingMessage': 'Are you sure that you want to delete this task ?',
   'yes': 'Yes',
   'no': 'No',
+  'noInternetConnection': 'No internet connection',
 };

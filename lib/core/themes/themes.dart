@@ -41,6 +41,7 @@ class AppThemes {
       onPrimaryContainer: AppColors.backgroundColor,
       onSecondaryContainer: AppColors.white,
     ),
+    snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.grey),
   );
 
   // Dark Theme
@@ -82,5 +83,6 @@ class AppThemes {
       onPrimaryContainer: AppColors.grey,
       onSecondaryContainer: AppColors.grey,
     ),
+    snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.grey),
   );
 }

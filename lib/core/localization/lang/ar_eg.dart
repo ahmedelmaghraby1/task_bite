@@ -29,4 +29,5 @@ final Map<String, String> arEg = {
   'deletingMessage': 'هل أنت متأكد من أنك تريد حذف هذه المهمة',
   'yes': 'نعم',
   'no': 'لا',
+  'noInternetConnection': 'لا يوجد اتصال بالإنترنت',
 };
