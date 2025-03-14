@@ -45,67 +45,70 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.purpple, AppColors.lightPurpple],
-            begin: AlignmentDirectional.topStart,
-            end: AlignmentDirectional.bottomCenter,
+      body: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.purpple, AppColors.lightPurpple],
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomCenter,
+            ),
           ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 10.h,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 10.w,
-                children: [
-                  AnimatedOpacity(
-                    opacity: firstWord ? 1 : 0,
-                    duration: const Duration(seconds: 1),
-                    child: Text(
-                      'Task',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 30,
-                        color: AppColors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 10.h,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 10.w,
+                  children: [
+                    AnimatedOpacity(
+                      opacity: firstWord ? 1 : 0,
+                      duration: const Duration(seconds: 1),
+                      child: Text(
+                        'Task',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: 30,
+                          color: AppColors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  AnimatedOpacity(
-                    opacity: secondWord ? 1 : 0,
-                    duration: const Duration(seconds: 1),
-                    child: Text(
-                      'bite',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 20,
-                        color: AppColors.white,
+                    AnimatedOpacity(
+                      opacity: secondWord ? 1 : 0,
+                      duration: const Duration(seconds: 1),
+                      child: Text(
+                        'bite',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: 20,
+                          color: AppColors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 120.h,
-                child:
-                    viewImage
-                        ? TweenAnimationBuilder(
-                          tween: Tween<double>(begin: 0.5, end: 1.0),
-                          duration: Duration(seconds: 2),
-                          curve: Curves.elasticInOut,
-                          builder:
-                              (context, value, child) =>
-                                  Transform.scale(scale: value, child: child),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: 10,
-                            children: [Image.asset(ImageConstants.task)],
-                          ),
-                        )
-                        : SizedBox(),
-              ),
-            ],
+                  ],
+                ),
+                SizedBox(
+                  height: 120.h,
+                  child:
+                      viewImage
+                          ? TweenAnimationBuilder(
+                            tween: Tween<double>(begin: 0.5, end: 1.0),
+                            duration: Duration(seconds: 2),
+                            curve: Curves.elasticInOut,
+                            builder:
+                                (context, value, child) =>
+                                    Transform.scale(scale: value, child: child),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 10,
+                              children: [Image.asset(ImageConstants.task)],
+                            ),
+                          )
+                          : SizedBox(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

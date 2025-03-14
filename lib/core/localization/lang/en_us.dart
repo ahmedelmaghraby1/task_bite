@@ -31,4 +31,7 @@ final Map<String, String> enUs = {
   'yes': 'Yes',
   'no': 'No',
   'noInternetConnection': 'No internet connection',
+  'goToAppSettingsMessage': 'Go to app settings',
+  'go': 'Go',
+  'back': 'Back',
 };

@@ -56,10 +56,11 @@ class _HomeScreenState extends State<HomeScreen>
         child: GestureDetector(
           onTap: () {
             showModalBottomSheet(
+              isScrollControlled: true,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               context: context,
               builder: (context) => CustomModalBottomSheet(),
-              scrollControlDisabledMaxHeightRatio: 0.65,
+              // scrollControlDisabledMaxHeightRatio: 0.65,
             );
           },
           child: CircleAvatar(

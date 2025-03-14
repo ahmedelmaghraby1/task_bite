@@ -30,4 +30,7 @@ final Map<String, String> arEg = {
   'yes': 'نعم',
   'no': 'لا',
   'noInternetConnection': 'لا يوجد اتصال بالإنترنت',
+  'goToAppSettingsMessage': 'اذهب إلى إعدادات التطبيق',
+  'go': 'اذهب',
+  'back': 'رجوع',
 };

@@ -19,32 +19,15 @@ class CompletedTasksView extends StatefulWidget {
 
 class _CompletedTasksViewState extends State<CompletedTasksView> {
   late final TextEditingController _searchController;
+  late final FocusNode _searchFocusNode;
 
   Timer? _debounce; // تايمر لتأخير البحث
-  List filteredTasks = [];
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-
-    _filterTasks(); // تشغيل البحث أول مرة عشان يعرض كل التاسكات
-  }
-
-  void _filterTasks() {
-    var box = Hive.box<TaskModel>('tasks');
-    var searchText = _searchController.text.toLowerCase();
-
-    setState(() {
-      filteredTasks =
-          box.values
-              .where(
-                (task) =>
-                    task.title.toLowerCase().contains(searchText) ||
-                    task.content.toLowerCase().contains(searchText),
-              )
-              .toList();
-    });
+    _searchFocusNode = FocusNode();
   }
 
   void _onSearchChanged(String value) {
@@ -53,7 +36,7 @@ class _CompletedTasksViewState extends State<CompletedTasksView> {
 
     // تشغيل التايمر، وبعد 3 ثواني يتم استدعاء `setState()`
     _debounce = Timer(Duration(seconds: 3), () {
-      _filterTasks();
+      setState(() {});
     });
   }
 
@@ -61,6 +44,7 @@ class _CompletedTasksViewState extends State<CompletedTasksView> {
   void dispose() {
     _searchController.dispose();
     _debounce?.cancel(); // إلغاء التايمر عند الخروج من الصفحة
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -77,6 +61,13 @@ class _CompletedTasksViewState extends State<CompletedTasksView> {
           SearchBox(
             textEditingController: _searchController,
             onChanged: _onSearchChanged,
+            focusNode: _searchFocusNode,
+            onFieldSubmitted: (val) {
+              _searchFocusNode.unfocus();
+            },
+            onTapOutside: (val) {
+              _searchFocusNode.unfocus();
+            },
           ),
           ValueListenableBuilder(
             valueListenable: HiveHelper.taskListenable(),

@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:taskbite/core/constants/enums.dart';
 import 'package:taskbite/core/localization/app_localization.dart';
 import 'package:taskbite/core/localization/cubit/localization_cubit.dart';
 import 'package:taskbite/core/themes/colors.dart';
+import 'package:taskbite/core/utils/alert_dialog.dart';
 import 'package:taskbite/core/utils/check_connection.dart';
 import 'package:taskbite/core/utils/extensions.dart';
 import 'package:taskbite/core/utils/permissions.dart';
@@ -31,11 +33,12 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   late final FocusNode _contentFocusNode;
   late GlobalKey<FormState> _taskKey;
   late stt.SpeechToText _speech;
+  late bool checkConnection;
   late int _recordedTime = 0;
   late int minutes = 0;
   late int seconds = 0;
   bool _isListening = false;
-  bool _micPermissionChecked = false;
+  late bool _micPermissionChecked = false;
   String _text = "";
   Timer? _timer;
 
@@ -58,13 +61,31 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() async {
+    checkConnection = await hasInternetConnection();
+    super.didChangeDependencies();
+  }
+
   void _startListening() async {
-    final bool checkConnection = await hasInternetConnection();
     if (!checkConnection) {
       if (mounted) context.showSnack();
     } else {
+      _micPermissionChecked = await checkMicPermission();
       if (!_micPermissionChecked) {
         _micPermissionChecked = await checkMicPermission();
+        if (_micPermissionChecked == false && mounted) {
+          showAlertDialog(
+            yesTitle: 'go',
+            noTitle: 'back',
+            onYesFunction: () {
+              Navigator.pop(context);
+              openAppSettings();
+            },
+            context,
+            message: 'goToAppSettingsMessage'.tr(context),
+          );
+        }
       } else {
         bool available = await _speech.initialize();
         if (available) {
@@ -96,7 +117,7 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
               });
             },
             onSoundLevelChange: (level) {
-              if (level <= 0.1 && _isListening) {
+              if (level <= 0.1 && _isListening && mounted) {
                 Future.delayed(const Duration(seconds: 3), () {
                   _stopListening();
                 });
@@ -109,16 +130,20 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   }
 
   void _stopListening() {
-    _recordedTime = 0;
-    minutes = 0;
-    seconds = 0;
-    _speech.stop();
-    _timer?.cancel();
+    if (!mounted) {
+      return;
+    } else {
+      _recordedTime = 0;
+      minutes = 0;
+      seconds = 0;
+      _speech.stop();
+      _timer?.cancel();
 
-    setState(() {
-      _isListening = false;
-      _contentController.text = _text;
-    });
+      setState(() {
+        _isListening = false;
+        _contentController.text = _text;
+      });
+    }
   }
 
   @override
@@ -129,15 +154,19 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
     _timer?.cancel();
     _titleFocusNode.dispose();
     _contentFocusNode.dispose();
+    _speech.stop();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: 600.h,
-        child: Stack(
+    return SizedBox(
+      height:
+          ((_titleFocusNode.hasFocus || _contentFocusNode.hasFocus) ? 650 : 550)
+              .h,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
           children: [
             Column(
               children: [
@@ -195,7 +224,6 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
                         text: 'taskContent',
                         trailling: GestureDetector(
                           onTap: _isListening ? null : _startListening,
-
                           child: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,

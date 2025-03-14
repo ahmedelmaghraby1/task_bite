@@ -7,7 +7,7 @@ class AppThemes {
   // Light Theme
   static final ThemeData lightTheme = ThemeData(
     dialogTheme: DialogTheme(backgroundColor: AppColors.white),
-
+    appBarTheme: AppBarTheme(),
     fontFamily: FontAssets.poppins,
     iconTheme: const IconThemeData(color: AppColors.purpple, size: 30),
     brightness: Brightness.light,
@@ -41,7 +41,15 @@ class AppThemes {
       onPrimaryContainer: AppColors.backgroundColor,
       onSecondaryContainer: AppColors.white,
     ),
-    snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.grey),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.grey,
+      contentTextStyle: AppTextStyles.lightBodyLarge.copyWith(
+        color: AppColors.white,
+      ),
+      closeIconColor: AppColors.white,
+      showCloseIcon: true,
+      shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(22)),
+    ),
   );
 
   // Dark Theme
@@ -83,6 +91,14 @@ class AppThemes {
       onPrimaryContainer: AppColors.grey,
       onSecondaryContainer: AppColors.grey,
     ),
-    snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.grey),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.grey,
+      contentTextStyle: AppTextStyles.lightBodyLarge.copyWith(
+        color: AppColors.white,
+      ),
+      closeIconColor: AppColors.white,
+      showCloseIcon: true,
+      shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(22)),
+    ),
   );
 }

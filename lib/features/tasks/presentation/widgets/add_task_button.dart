@@ -27,7 +27,7 @@ class AddTaskButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         if (taskFormKey.currentState!.validate()) {
           Box taskBox = Hive.box<TaskModel>('tasks');

@@ -19,6 +19,7 @@ class PendingTasksView extends StatefulWidget {
 
 class _PendingTasksViewState extends State<PendingTasksView> {
   late final TextEditingController _searchController;
+  late final FocusNode _searchFocusNode;
 
   Timer? _debounce; // تايمر لتأخير البحث
   List filteredTasks = [];
@@ -27,6 +28,7 @@ class _PendingTasksViewState extends State<PendingTasksView> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _searchFocusNode = FocusNode();
 
     _filterTasks(); // تشغيل البحث أول مرة عشان يعرض كل التاسكات
   }
@@ -61,6 +63,7 @@ class _PendingTasksViewState extends State<PendingTasksView> {
   void dispose() {
     _searchController.dispose();
     _debounce?.cancel(); // إلغاء التايمر عند الخروج من الصفحة
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -77,6 +80,13 @@ class _PendingTasksViewState extends State<PendingTasksView> {
           SearchBox(
             textEditingController: _searchController,
             onChanged: _onSearchChanged,
+            focusNode: _searchFocusNode,
+            onFieldSubmitted: (val) {
+              _searchFocusNode.unfocus();
+            },
+            onTapOutside: (val) {
+              _searchFocusNode.unfocus();
+            },
           ),
           ValueListenableBuilder(
             valueListenable: HiveHelper.taskListenable(),

@@ -4,7 +4,6 @@ import 'package:taskbite/core/localization/app_localization.dart';
 import 'package:taskbite/features/home/presentation/widgets/head_title.dart';
 import 'package:taskbite/features/settings/presentation/widgets/app_language_component.dart';
 import 'package:taskbite/features/settings/presentation/widgets/dark_mode_component.dart';
-import 'package:taskbite/features/settings/presentation/widgets/settings_app_bar.dart';
 import 'package:taskbite/features/settings/presentation/widgets/sound_recognetion_language_component.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -13,11 +12,18 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back_ios_new, size: 30),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsetsDirectional.symmetric(horizontal: 15.w),
-        child: Column(
+        child: ListView(
           children: [
-            SettingsAppBar(),
             Padding(
               padding: EdgeInsetsDirectional.symmetric(vertical: 10.h),
               child: Column(
