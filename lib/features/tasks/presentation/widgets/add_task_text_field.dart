@@ -39,7 +39,7 @@ class AddTaskTextField extends StatelessWidget {
         onFieldSubmitted: onFieldSubmitted,
         onTapOutside: onTapOutside,
         maxLength: maxLength,
-        maxLines: 10,
+        maxLines: 7,
         minLines: 1,
         validator:
             type == FieldType.content

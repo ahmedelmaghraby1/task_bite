@@ -37,7 +37,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  curve: Curves.bounceInOut,
+                  curve: Curves.linear,
                   decoration: BoxDecoration(
                     color:
                         currentIndex == index

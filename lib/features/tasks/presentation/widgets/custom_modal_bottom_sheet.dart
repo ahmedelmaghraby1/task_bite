@@ -55,6 +55,9 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   @override
   void didChangeDependencies() async {
     checkConnection = await hasInternetConnection();
+    setState(() {
+      checkConnection = checkConnection;
+    });
     super.didChangeDependencies();
   }
 
@@ -219,12 +222,21 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
                         textInputAction: TextInputAction.done,
                         text: 'taskContent',
                         trailling: GestureDetector(
-                          onTap: _isListening ? null : _startListening,
+                          onTap: () {
+                            if (checkConnection == false) {
+                            } else {
+                              _isListening ? null : _startListening();
+                            }
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color:
-                                  _isListening ? Colors.red : AppColors.purpple,
+                                  (checkConnection == false)
+                                      ? AppColors.grey
+                                      : _isListening
+                                      ? Colors.red
+                                      : AppColors.purpple,
                             ),
                             child: Icon(Icons.mic, color: AppColors.white),
                           ),

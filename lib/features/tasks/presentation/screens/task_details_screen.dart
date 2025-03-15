@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:taskbite/core/helpers/hive_helper.dart';
 import 'package:taskbite/core/localization/app_localization.dart';
-import 'package:taskbite/features/home/presentation/widgets/head_title.dart';
 import 'package:taskbite/features/tasks/data/models/task_model.dart';
 import 'package:taskbite/features/tasks/presentation/widgets/custom_app_bar.dart';
 import 'package:taskbite/features/tasks/presentation/widgets/shadow_container.dart';
@@ -31,60 +30,41 @@ class TaskDetailsScreen extends StatelessWidget {
                         vertical: 10.h,
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomAppBar(task: task, taskKey: taskKey),
-                          Padding(
-                            padding: EdgeInsetsDirectional.only(start: 15.w),
-                            child: HeadTitle(title: 'taskContent'.tr(context)),
-                          ),
-                          SizedBox(height: 30.h),
                           Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.only(
-                                      start: 15.w,
-                                    ),
-                                    child: Text(
-                                      'taskTitle'.tr(context),
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 20.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [Flexible(child: Text(task.title))],
-                              ),
-                            ],
-                          ),
-                          Row(
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.only(
                                   start: 15.w,
                                 ),
                                 child: Text(
-                                  'description'.tr(context),
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  'taskTitle'.tr(context),
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
+                              SizedBox(height: 20.h),
+                              Text(task.title),
                             ],
                           ),
                           SizedBox(height: 20.h),
+
+                          Padding(
+                            padding: EdgeInsetsDirectional.only(start: 15.w),
+                            child: Text(
+                              'description'.tr(context),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  SizedBox(height: 20.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(child: Text(task.content)),
-                                    ],
+                                  Text(
+                                    task.content,
+                                    textAlign: TextAlign.justify,
                                   ),
                                 ],
                               ),
@@ -95,6 +75,7 @@ class TaskDetailsScreen extends StatelessWidget {
                           Column(
                             children: [
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.only(
@@ -103,7 +84,9 @@ class TaskDetailsScreen extends StatelessWidget {
                                     child: Text(
                                       'status'.tr(context),
                                       style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.titleLarge,
                                     ),
                                   ),
                                 ],

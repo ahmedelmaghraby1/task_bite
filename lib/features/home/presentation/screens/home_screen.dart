@@ -23,13 +23,18 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      // _selectedIndex = index;
     });
-    _pageController.animateToPage(
-      index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    if (_selectedIndex == index) {}
+    if ((_selectedIndex - index).abs() > 1) {
+      _pageController.jumpToPage(index);
+    } else {
+      _pageController.animateToPage(
+        index,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.linear,
+      );
+    }
   }
 
   void _onPageChanged(int index) {
@@ -60,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen>
               clipBehavior: Clip.antiAliasWithSaveLayer,
               context: context,
               builder: (context) => CustomModalBottomSheet(),
-              // scrollControlDisabledMaxHeightRatio: 0.65,
             );
           },
           child: CircleAvatar(

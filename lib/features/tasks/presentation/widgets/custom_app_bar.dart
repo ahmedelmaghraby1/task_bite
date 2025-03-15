@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskbite/core/localization/app_localization.dart';
+import 'package:taskbite/features/home/presentation/widgets/head_title.dart';
 import 'package:taskbite/features/tasks/data/models/task_model.dart';
 import 'package:taskbite/features/tasks/presentation/widgets/back_icon.dart';
 import 'package:taskbite/features/tasks/presentation/widgets/delete_icon.dart';
@@ -19,6 +21,10 @@ class CustomAppBar extends StatelessWidget {
         Row(
           children: [
             BackIcon(),
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 15.w),
+              child: HeadTitle(title: 'taskContent'.tr(context)),
+            ),
             Spacer(),
             if (task.status == TaskStatus.newTask)
               EditIcon(task: task, taskKey: taskKey),
