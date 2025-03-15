@@ -26,39 +26,30 @@ class CustomModalBottomSheet extends StatefulWidget {
 }
 
 class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
-  late bool titleEmpty;
-  late final TextEditingController _titleController;
-  late final TextEditingController _contentController;
-  late final FocusNode _titleFocusNode;
-  late final FocusNode _contentFocusNode;
-  late GlobalKey<FormState> _taskKey;
-  late stt.SpeechToText _speech;
-  late bool checkConnection;
-  late int _recordedTime = 0;
-  late int minutes = 0;
-  late int seconds = 0;
+  bool titleEmpty = true;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  final FocusNode _titleFocusNode = FocusNode();
+  final FocusNode _contentFocusNode = FocusNode();
+  final GlobalKey<FormState> _taskKey = GlobalKey<FormState>();
+  final stt.SpeechToText _speech = stt.SpeechToText();
+  bool checkConnection = false;
+  int _recordedTime = 0;
+  int minutes = 0;
+  int seconds = 0;
   bool _isListening = false;
-  late bool _micPermissionChecked = false;
+  bool _micPermissionChecked = false;
   String _text = "";
   Timer? _timer;
 
   @override
   void initState() {
-    _titleFocusNode = FocusNode();
-    _contentFocusNode = FocusNode();
-    titleEmpty = widget.task == null ? true : false;
-    _titleController =
-        widget.task == null
-            ? TextEditingController()
-            : TextEditingController(text: widget.task!.title);
-    _contentController =
-        widget.task == null
-            ? TextEditingController()
-            : TextEditingController(text: widget.task!.content);
-    _taskKey = GlobalKey<FormState>();
-    _speech = stt.SpeechToText();
-
     super.initState();
+    if (widget.task != null) {
+      _titleController.text = widget.task!.title;
+      _contentController.text = widget.task!.content;
+      titleEmpty = false;
+    }
   }
 
   @override
@@ -70,63 +61,69 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   void _startListening() async {
     if (!checkConnection) {
       if (mounted) context.showSnack();
-    } else {
-      _micPermissionChecked = await checkMicPermission();
-      if (!_micPermissionChecked) {
-        _micPermissionChecked = await checkMicPermission();
-        if (_micPermissionChecked == false && mounted) {
-          showAlertDialog(
-            yesTitle: 'go',
-            noTitle: 'back',
-            onYesFunction: () {
-              Navigator.pop(context);
-              openAppSettings();
-            },
-            context,
-            message: 'goToAppSettingsMessage'.tr(context),
-          );
-        }
-      } else {
-        bool available = await _speech.initialize();
-        if (available) {
-          setState(() {
-            _isListening = true;
-          });
-          _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-            setState(() {
-              _recordedTime++;
-              minutes = _recordedTime ~/ 60;
-              seconds = _recordedTime % 60;
-            });
-          });
-          _speech.listen(
-            pauseFor: Duration(minutes: 5),
-            localeId:
-                mounted
-                    ? LocalizationCubit.get(context).recordingLanguage
-                    : 'ar',
-            listenOptions: stt.SpeechListenOptions(
-              partialResults: true,
-              listenMode: stt.ListenMode.dictation,
-              autoPunctuation: true,
-            ),
-
-            onResult: (result) {
-              setState(() {
-                _text += result.recognizedWords;
-              });
-            },
-            onSoundLevelChange: (level) {
-              if (level <= 0.1 && _isListening && mounted) {
-                Future.delayed(const Duration(seconds: 3), () {
-                  _stopListening();
-                });
-              }
-            },
-          );
-        }
-      }
+      return;
     }
+
+    _micPermissionChecked = await checkMicPermission();
+    if (!_micPermissionChecked && mounted) {
+      _handleMicPermissionDenied();
+      return;
+    }
+
+    bool available = await _speech.initialize();
+    if (available) {
+      _startSpeechRecognition();
+    }
+  }
+
+  void _handleMicPermissionDenied() async {
+    _micPermissionChecked = await checkMicPermission();
+    if (!_micPermissionChecked && mounted) {
+      showAlertDialog(
+        yesTitle: 'go',
+        noTitle: 'back',
+        onYesFunction: () {
+          Navigator.pop(context);
+          openAppSettings();
+        },
+        context,
+        message: 'goToAppSettingsMessage'.tr(context),
+      );
+    }
+  }
+
+  void _startSpeechRecognition() {
+    setState(() => _isListening = true);
+    _startTimer();
+    _speech.listen(
+      pauseFor: Duration(minutes: 5),
+      localeId:
+          mounted ? LocalizationCubit.get(context).recordingLanguage : 'ar',
+      listenOptions: stt.SpeechListenOptions(
+        partialResults: true,
+        listenMode: stt.ListenMode.dictation,
+        autoPunctuation: true,
+      ),
+      onResult: (result) {
+        setState(() {
+          _text = result.recognizedWords;
+          if (result.finalResult) {
+            _contentController.text = _text;
+            _stopListening();
+          }
+        });
+      },
+    );
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      setState(() {
+        _recordedTime++;
+        minutes = _recordedTime ~/ 60;
+        seconds = _recordedTime % 60;
+      });
+    });
   }
 
   void _stopListening() {
@@ -150,7 +147,6 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   void dispose() {
     _titleController.dispose();
     _contentController.dispose();
-    _taskKey = GlobalKey<FormState>();
     _timer?.cancel();
     _titleFocusNode.dispose();
     _contentFocusNode.dispose();
