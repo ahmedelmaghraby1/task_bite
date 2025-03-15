@@ -22,10 +22,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      // _selectedIndex = index;
-    });
-    if (_selectedIndex == index) {}
+    if (_selectedIndex == index) return;
     if ((_selectedIndex - index).abs() > 1) {
       _pageController.jumpToPage(index);
     } else {
