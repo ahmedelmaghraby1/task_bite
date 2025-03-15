@@ -30,34 +30,28 @@ class TaskDetailsScreen extends StatelessWidget {
                         vertical: 10.h,
                       ),
                       child: Column(
+                        spacing: 20.h,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomAppBar(task: task, taskKey: taskKey),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.only(
-                                  start: 15.w,
-                                ),
-                                child: Text(
-                                  'taskTitle'.tr(context),
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                              ),
-                              SizedBox(height: 20.h),
-                              Text(task.title),
-                            ],
-                          ),
-                          SizedBox(height: 20.h),
 
-                          Padding(
-                            padding: EdgeInsetsDirectional.only(start: 15.w),
-                            child: Text(
-                              'description'.tr(context),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
+                          Text(
+                            'taskTitle'.tr(context),
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
-                          SizedBox(height: 10.h),
+
+                          Text(
+                            task.title,
+                            style: Theme.of(context).textTheme.bodyLarge!
+                                .copyWith(fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.justify,
+                          ),
+
+                          Text(
+                            'description'.tr(context),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -65,118 +59,124 @@ class TaskDetailsScreen extends StatelessWidget {
                                   Text(
                                     task.content,
                                     textAlign: TextAlign.justify,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                 ],
                               ),
                             ),
                           ),
 
-                          SizedBox(height: 20.h),
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.only(
-                                      start: 15.w,
-                                    ),
-                                    child: Text(
-                                      'status'.tr(context),
-                                      style:
-                                          Theme.of(
-                                            context,
-                                          ).textTheme.titleLarge,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                'status'.tr(context),
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              SizedBox(height: 20.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      (task.status == TaskStatus.newTask
-                                              ? 'new'
-                                              : task.status ==
-                                                  TaskStatus.pending
-                                              ? 'pending'
-                                              : 'completed')
-                                          .tr(context),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 20.h),
-                              task.status == TaskStatus.newTask
-                                  ? GestureDetector(
-                                    onTap: () {
-                                      Box tasksBox = Hive.box<TaskModel>(
-                                        'tasks',
-                                      );
-                                      TaskModel currentTask = tasksBox.get(
-                                        taskKey,
-                                      );
-                                      currentTask.status = TaskStatus.pending;
-                                      currentTask.save();
-                                    },
-                                    child: ShadowedContainer(
-                                      width: 90.w,
-                                      height: 34.h,
-                                      borderWidth: 0,
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.inversePrimary,
-                                      borderRadius: BorderRadius.circular(10.r),
-                                      padding: EdgeInsetsDirectional.symmetric(
-                                        horizontal: 4.w,
-                                        vertical: 2.h,
-                                      ),
-                                      borderColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      child: Center(
-                                        child: Text(('start').tr(context)),
-                                      ),
-                                    ),
-                                  )
-                                  : task.status == TaskStatus.pending
-                                  ? GestureDetector(
-                                    onTap: () {
-                                      Box tasksBox = Hive.box<TaskModel>(
-                                        'tasks',
-                                      );
-                                      TaskModel currentTask = tasksBox.get(
-                                        taskKey,
-                                      );
-                                      currentTask.status = TaskStatus.completed;
-                                      currentTask.save();
-                                    },
-                                    child: ShadowedContainer(
-                                      width: 90.w,
-                                      height: 34.h,
-                                      borderWidth: 0,
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.inversePrimary,
-                                      borderRadius: BorderRadius.circular(10.r),
-                                      padding: EdgeInsetsDirectional.symmetric(
-                                        horizontal: 4.w,
-                                        vertical: 2.h,
-                                      ),
-                                      borderColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      child: Center(
-                                        child: Text(('complete').tr(context)),
-                                      ),
-                                    ),
-                                  )
-                                  : SizedBox(),
-                              SizedBox(height: 10.h),
                             ],
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  (task.status == TaskStatus.newTask
+                                          ? 'new'
+                                          : task.status == TaskStatus.pending
+                                          ? 'pending'
+                                          : 'completed')
+                                      .tr(context),
+                                  style: Theme.of(context).textTheme.bodyLarge!
+                                      .copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: AlignmentDirectional.center,
+                            child:
+                                task.status == TaskStatus.newTask
+                                    ? GestureDetector(
+                                      onTap: () {
+                                        Box tasksBox = Hive.box<TaskModel>(
+                                          'tasks',
+                                        );
+                                        TaskModel currentTask = tasksBox.get(
+                                          taskKey,
+                                        );
+                                        currentTask.status = TaskStatus.pending;
+                                        currentTask.save();
+                                      },
+                                      child: ShadowedContainer(
+                                        width: 90.w,
+                                        height: 34.h,
+                                        borderWidth: 0,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.inversePrimary,
+                                        borderRadius: BorderRadius.circular(
+                                          10.r,
+                                        ),
+                                        padding:
+                                            EdgeInsetsDirectional.symmetric(
+                                              horizontal: 4.w,
+                                              vertical: 2.h,
+                                            ),
+                                        borderColor:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                        child: Center(
+                                          child: Text(('start').tr(context)),
+                                        ),
+                                      ),
+                                    )
+                                    : task.status == TaskStatus.pending
+                                    ? GestureDetector(
+                                      onTap: () {
+                                        Box tasksBox = Hive.box<TaskModel>(
+                                          'tasks',
+                                        );
+                                        TaskModel currentTask = tasksBox.get(
+                                          taskKey,
+                                        );
+                                        currentTask.status =
+                                            TaskStatus.completed;
+                                        currentTask.save();
+                                      },
+                                      child: ShadowedContainer(
+                                        width: 90.w,
+                                        height: 34.h,
+                                        borderWidth: 0,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.inversePrimary,
+                                        borderRadius: BorderRadius.circular(
+                                          10.r,
+                                        ),
+                                        padding:
+                                            EdgeInsetsDirectional.symmetric(
+                                              horizontal: 4.w,
+                                              vertical: 2.h,
+                                            ),
+                                        borderColor:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                        child: Center(
+                                          child: Text(('complete').tr(context)),
+                                        ),
+                                      ),
+                                    )
+                                    : SizedBox(),
+                          ),
+
+                          SizedBox(height: 10.h),
                         ],
                       ),
                     )

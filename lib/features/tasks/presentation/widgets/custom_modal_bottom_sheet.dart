@@ -55,9 +55,11 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   @override
   void didChangeDependencies() async {
     checkConnection = await hasInternetConnection();
-    setState(() {
-      checkConnection = checkConnection;
-    });
+    if (mounted) {
+      setState(() {
+        checkConnection;
+      });
+    }
     super.didChangeDependencies();
   }
 
@@ -161,7 +163,7 @@ class _CustomModalBottomSheetState extends State<CustomModalBottomSheet> {
   Widget build(BuildContext context) {
     return SizedBox(
       height:
-          ((_titleFocusNode.hasFocus || _contentFocusNode.hasFocus) ? 650 : 550)
+          ((_titleFocusNode.hasFocus || _contentFocusNode.hasFocus) ? 750 : 550)
               .h,
       child: Scaffold(
         resizeToAvoidBottomInset: false,

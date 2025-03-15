@@ -8,6 +8,7 @@ class TaskTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 145.w,
       height: 34.h,
       padding: EdgeInsetsDirectional.symmetric(horizontal: 10.w),
       decoration: BoxDecoration(

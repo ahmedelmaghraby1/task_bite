@@ -27,10 +27,10 @@ class HiveHelper {
     required TaskModel task,
   }) {
     showModalBottomSheet(
+      isScrollControlled: true,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       context: context,
-      builder:
-          (context) => CustomModalBottomSheet(task: task, taskKey: taskKey),
-      scrollControlDisabledMaxHeightRatio: 1,
+      builder: (context) => CustomModalBottomSheet(),
     );
   }
 
