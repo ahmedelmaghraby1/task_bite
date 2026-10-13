@@ -1,0 +1,10 @@
+name = "taskbite-ai-proxy"
+main = "index.js"
+compatibility_date = "2026-10-13"
+
+[vars]
+TRANSCRIBE_ENDPOINT = "https://api.groq.com/openai/v1/audio/transcriptions"
+CHAT_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
+
+[[secrets]]
+binding = "GROQ_API_KEY"

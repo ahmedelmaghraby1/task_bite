@@ -23,47 +23,43 @@ class SoundRecognetionLanguageComponent extends StatelessWidget {
             return ShadowedContainer(
               borderColor: Theme.of(context).colorScheme.tertiary,
               padding: EdgeInsetsDirectional.symmetric(horizontal: 30.w),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'English',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Spacer(),
-                      Radio<String>(
-                        value: 'en',
-                        groupValue:
-                            LocalizationCubit.get(context).recordingLanguage,
-                        onChanged: (value) {
-                          LocalizationCubit.get(
-                            context,
-                          ).changeLanguageToEnglish(LanguageType.record);
-                        },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'العربية',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Spacer(),
-                      Radio<String>(
-                        value: 'ar',
-                        groupValue:
-                            LocalizationCubit.get(context).recordingLanguage,
-                        onChanged: (value) {
-                          LocalizationCubit.get(
-                            context,
-                          ).changeLanguageToArabic(LanguageType.record);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+              child: RadioGroup<String>(
+                groupValue: LocalizationCubit.get(context).recordingLanguage,
+                onChanged: (value) {
+                  if (value == 'en') {
+                    LocalizationCubit.get(
+                      context,
+                    ).changeLanguageToEnglish(LanguageType.record);
+                  } else if (value == 'ar') {
+                    LocalizationCubit.get(
+                      context,
+                    ).changeLanguageToArabic(LanguageType.record);
+                  }
+                },
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'English',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        Spacer(),
+                        Radio<String>(value: 'en'),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'العربية',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        Spacer(),
+                        Radio<String>(value: 'ar'),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           },

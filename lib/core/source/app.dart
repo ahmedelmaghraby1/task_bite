@@ -8,6 +8,7 @@ import 'package:taskbite/core/localization/cubit/localization_cubit.dart';
 import 'package:taskbite/core/routes/router.dart';
 import 'package:taskbite/core/themes/themes.dart';
 import 'package:taskbite/features/settings/cubits/settings_cubit.dart';
+import 'package:taskbite/features/tasks/presentation/cubit/tasks_cubit.dart';
 
 class TaskBite extends StatelessWidget {
   const TaskBite({super.key});
@@ -21,6 +22,9 @@ class TaskBite extends StatelessWidget {
         ),
         BlocProvider<SettingsCubit>(
           create: (context) => getIt<SettingsCubit>(),
+        ),
+        BlocProvider<TasksCubit>(
+          create: (context) => getIt<TasksCubit>()..load(),
         ),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(

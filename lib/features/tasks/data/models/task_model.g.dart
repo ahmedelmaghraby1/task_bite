@@ -20,19 +20,28 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
       title: fields[0] as String,
       content: fields[1] as String,
       status: fields[2] as TaskStatus,
+      dueDate: fields[3] as DateTime?,
+      createdAt: fields[4] as DateTime?,
+      updatedAt: fields[5] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TaskModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.content)
       ..writeByte(2)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(3)
+      ..write(obj.dueDate)
+      ..writeByte(4)
+      ..write(obj.createdAt)
+      ..writeByte(5)
+      ..write(obj.updatedAt);
   }
 
   @override
@@ -59,6 +68,8 @@ class TaskStatusAdapter extends TypeAdapter<TaskStatus> {
         return TaskStatus.pending;
       case 2:
         return TaskStatus.completed;
+      case 3:
+        return TaskStatus.failed;
       default:
         return TaskStatus.newTask;
     }
@@ -75,6 +86,9 @@ class TaskStatusAdapter extends TypeAdapter<TaskStatus> {
         break;
       case TaskStatus.completed:
         writer.writeByte(2);
+        break;
+      case TaskStatus.failed:
+        writer.writeByte(3);
         break;
     }
   }

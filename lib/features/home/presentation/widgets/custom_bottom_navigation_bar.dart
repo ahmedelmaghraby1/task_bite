@@ -1,74 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskbite/core/localization/app_localization.dart';
-import 'package:taskbite/core/themes/colors.dart';
 import 'package:taskbite/features/home/data/constant_data.dart';
 
+/// Theme-aware bottom navigation with the task status tabs.
+///
+/// Selected items use the theme's primary container so the bar looks correct
+/// in both light and dark mode (no hardcoded colors).
 class CustomBottomNavigationBar extends StatelessWidget {
-  final int index;
-  final void Function(int) onTap;
   const CustomBottomNavigationBar({
     super.key,
     required this.onTap,
     required this.index,
   });
 
+  final int index;
+  final void Function(int) onTap;
+
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadiusDirectional.only(
-        topStart: Radius.circular(10.r),
-        topEnd: Radius.circular(10.r),
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        border: Border(top: BorderSide(color: scheme.outlineVariant)),
       ),
-
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.tertiary.withOpacity(0.2),
-        ),
-        height: 90.h,
+      child: SizedBox(
+        height: 68,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
-            3,
+            navItemsNames.length,
             (currentIndex) => Expanded(
-              child: InkWell(
-                onTap: () {
-                  onTap(currentIndex);
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.linear,
-                  decoration: BoxDecoration(
-                    color:
-                        currentIndex == index
-                            ? AppColors.white
-                            : AppColors.transparent,
-                    gradient: LinearGradient(
-                      colors: [AppColors.purpple, AppColors.lightPurpple],
-                      begin: AlignmentDirectional.centerStart,
-                      end: AlignmentDirectional.centerEnd,
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        navItemsIcons[currentIndex],
-                        color: currentIndex == index ? AppColors.white : null,
-                      ),
-                      SizedBox(height: 10.h),
-                      Text(
-                        navItemsNames[currentIndex].tr(context),
-                        style: TextStyle(
-                          color: currentIndex == index ? AppColors.white : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              child: _NavItem(
+                icon: navItemsIcons[currentIndex],
+                labelKey: navItemsNames[currentIndex],
+                selected: currentIndex == index,
+                onTap: () => onTap(currentIndex),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  const _NavItem({
+    required this.icon,
+    required this.labelKey,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String labelKey;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final color =
+        selected ? scheme.onPrimaryContainer : scheme.onSurfaceVariant;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: labelKey.tr(context),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 18,
+                vertical: 5,
+              ),
+              decoration: BoxDecoration(
+                color: selected ? scheme.primaryContainer : Colors.transparent,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(icon, size: 22, color: color),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              labelKey.tr(context),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: color,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );

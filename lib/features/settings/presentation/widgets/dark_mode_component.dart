@@ -22,15 +22,21 @@ class DarkModeComponent extends StatelessWidget {
             return ShadowedContainer(
               padding: EdgeInsets.zero,
               borderColor: Theme.of(context).colorScheme.tertiary,
-              child: SwitchListTile.adaptive(
-                title: Text(
-                  'darkMode'.tr(context),
-                  style: Theme.of(context).textTheme.bodyLarge,
+              child: Material(
+                // Material paint target so the tile's ink/background are not
+                // hidden by the DecoratedBox (ShadowedContainer) above it.
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(25.r),
+                child: SwitchListTile.adaptive(
+                  title: Text(
+                    'darkMode'.tr(context),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  value: SettingsCubit.get(context).darkMode,
+                  onChanged: (value) {
+                    SettingsCubit.get(context).setDarkMode(value);
+                  },
                 ),
-                value: SettingsCubit.get(context).darkMode,
-                onChanged: (value) {
-                  SettingsCubit.get(context).setDarkMode(value);
-                },
               ),
             );
           },

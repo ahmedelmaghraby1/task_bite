@@ -2,8 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:taskbite/core/utils/alert_dialog.dart';
 import 'package:taskbite/features/tasks/data/models/task_model.dart';
+import 'package:taskbite/features/tasks/domain/models/stored_task.dart';
+import 'package:taskbite/features/tasks/presentation/widgets/task_composer_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:taskbite/features/tasks/presentation/widgets/custom_modal_bottom_sheet.dart';
 
 class HiveHelper {
   static Future<void> hiveInit() async {
@@ -26,12 +27,7 @@ class HiveHelper {
     required dynamic taskKey,
     required TaskModel task,
   }) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      context: context,
-      builder: (context) => CustomModalBottomSheet(),
-    );
+    showTaskComposer(context, existing: StoredTask(key: taskKey, task: task));
   }
 
   static void deleteTask({

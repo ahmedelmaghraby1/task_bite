@@ -22,39 +22,37 @@ class AppLanguageComponent extends StatelessWidget {
             return ShadowedContainer(
               borderColor: Theme.of(context).colorScheme.tertiary,
               padding: EdgeInsetsDirectional.symmetric(horizontal: 30.w),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('English'),
-                      Spacer(),
-                      Radio<String>.adaptive(
-                        value: 'en',
-                        groupValue: LocalizationCubit.get(context).language,
-                        onChanged: (value) {
-                          LocalizationCubit.get(
-                            context,
-                          ).changeLanguageToEnglish(LanguageType.normal);
-                        },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('العربية'),
-                      Spacer(),
-                      Radio<String>(
-                        value: 'ar',
-                        groupValue: LocalizationCubit.get(context).language,
-                        onChanged: (value) {
-                          LocalizationCubit.get(
-                            context,
-                          ).changeLanguageToArabic(LanguageType.normal);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+              child: RadioGroup<String>(
+                groupValue: LocalizationCubit.get(context).language,
+                onChanged: (value) {
+                  if (value == 'en') {
+                    LocalizationCubit.get(
+                      context,
+                    ).changeLanguageToEnglish(LanguageType.normal);
+                  } else if (value == 'ar') {
+                    LocalizationCubit.get(
+                      context,
+                    ).changeLanguageToArabic(LanguageType.normal);
+                  }
+                },
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text('English'),
+                        Spacer(),
+                        Radio<String>.adaptive(value: 'en'),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('العربية'),
+                        Spacer(),
+                        Radio<String>(value: 'ar'),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           },

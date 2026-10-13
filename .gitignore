@@ -40,6 +40,10 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+# Local AI configuration (contains provider keys) – never commit
+dart_define.json
+.env.local
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
